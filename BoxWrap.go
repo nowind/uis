@@ -45,21 +45,25 @@ func (self *BoxBuilder) addNamedControl(named string,control ui.Control) error{
 	self.children[named]=control
 	return nil
 }
-func (self *BoxBuilder)AppendBtn(named,text string,f func (*ui.Button))(*BoxBuilder,error,* ui.Button) {
+func (self *BoxBuilder)AppendBtn(named,text string,f func (*ui.Button))*BoxBuilder {
 	ret:=ui.NewButton(text)
-	_,e:=self.AppendControl(named,ret)
 	ret.OnClicked(f)
-	return self,e,ret
+	return self.AppendControl(named,ret)
 }
-func (self *BoxBuilder)AppendEntry(named  string)(*BoxBuilder,error,*ui.Entry) {
+func (self *BoxBuilder)AppendBtns(m map[string]func (*ui.Button))*BoxBuilder {
+	for k,v:=range m{
+		self.AppendBtn(k,k,v)
+	}
+	return self
+}
+func (self *BoxBuilder)AppendEntry(named  string)*BoxBuilder {
 	ret:=ui.NewEntry()
-	_,e:=self.AppendControl(named,ret)
-	return self,e,ret
+	return  self.AppendControl(named,ret)
 }
-func (self *BoxBuilder)AppendControl(named string,control ui.Control)(*BoxBuilder,error) {
-	err:=self.addNamedControl(named,control)
+func (self *BoxBuilder)AppendControl(named string,control ui.Control)*BoxBuilder {
+	self.addNamedControl(named,control)
 	self.append(control)
-	return self,err
+	return self
 }
 
 func (self *BoxBuilder) ToBox() *ui.Box{
