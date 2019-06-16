@@ -23,6 +23,7 @@ func BoxWrap(u *ui.Box) *BoxBuilder{
 	r.Box=u
 	u.SetPadded(true)
 	r.stretch=false
+	r.children=make(map[string]ui.Control)
 	return r
 }
 func (self *BoxBuilder) SetStretch(s bool) *BoxBuilder{
