@@ -50,9 +50,11 @@ func (self *BoxBuilder)AppendBtn(named,text string,f func (*ui.Button))*BoxBuild
 	ret.OnClicked(f)
 	return self.AppendControl(named,ret)
 }
-func (self *BoxBuilder)AppendBtns(m map[string]func (*ui.Button))*BoxBuilder {
-	for k,v:=range m{
-		self.AppendBtn(k,k,v)
+func (self *BoxBuilder)AppendBtns(m map[string]func (*ui.Button),sorted []string)*BoxBuilder {
+	for _,k:=range sorted{
+		if v,ok:=m[k];ok{
+			self.AppendBtn(k,k,v)
+		}
 	}
 	return self
 }
