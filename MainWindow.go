@@ -2,7 +2,7 @@ package uis
 
 import "github.com/andlabs/ui"
 
-func MainWindow(w,h int,f func (window *ui.Window)){
+func MainWindow(w,h int,f func (window *ui.Window) ui.Control){
 	ui.Main(func() {
 		w:=ui.NewWindow("",w,h,false)
 		w.SetMargined(true)
@@ -14,7 +14,7 @@ func MainWindow(w,h int,f func (window *ui.Window)){
 			w.Destroy()
 			return true
 		})
-		f(w)
+		w.SetChild(f(w))
 		w.Show()
 	})
 }

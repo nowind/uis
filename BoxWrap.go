@@ -19,11 +19,8 @@ func NewVBox() *BoxBuilder{
 }
 
 func BoxWrap(u *ui.Box) *BoxBuilder{
-	r:=new(BoxBuilder)
-	r.Box=u
+	r:=&BoxBuilder{u,false,make(map[string]ui.Control)}
 	u.SetPadded(true)
-	r.stretch=false
-	r.children=make(map[string]ui.Control)
 	return r
 }
 func (self *BoxBuilder) SetStretch(s bool) *BoxBuilder{
@@ -57,6 +54,17 @@ func (self *BoxBuilder)AppendBtns(m map[string]func (*ui.Button),sorted []string
 			self.AppendBtn(k,k,v)
 		}
 	}
+	return self
+}
+func (self *BoxBuilder)AppendForm(nameds  ...string)*BoxBuilder {
+	form:=ui.NewForm()
+	form.SetPadded(true)
+	for _,i:=range nameds{
+		ent:=ui.NewEntry()
+		self.addNamedControl(i,ent)
+		form.Append(i,ent,false)
+	}
+	self.Appends(form)
 	return self
 }
 func (self *BoxBuilder)AppendEntry(named  string)*BoxBuilder {
