@@ -3,6 +3,7 @@ package uis
 import (
 	"errors"
 	"github.com/andlabs/ui"
+	hashset "github.com/nowind/GoskUtils/HashSet"
 )
 
 type BoxBuilder struct {
@@ -57,16 +58,36 @@ func (self *BoxBuilder)AppendBtns(m map[string]func (*ui.Button),sorted []string
 	return self
 }
 func (self *BoxBuilder)AppendForm(nameds  ...string)*BoxBuilder {
+	return self.AppendFormWithComb(nil,nameds...)
+}
+func (self *BoxBuilder)AppendFormWithComb(combos []int ,nameds  ...string)*BoxBuilder {
+	if combos==nil {
+		combos = make([]int,0)
+	}
+	us:=make([]ui.Control,len(nameds))
+	set:=hashset.New()
+	for i,_:=range nameds{
+		if i
+		us=append(us,ui.NewEntry())
+	}
+	return self.AppendMixForm(nameds,us...)
+}
+func (self *BoxBuilder)AppendMixForm(nameds  []string,us ...ui.Control)*BoxBuilder {
 	form:=ui.NewForm()
 	form.SetPadded(true)
-	for _,i:=range nameds{
-		ent:=ui.NewEntry()
-		self.addNamedControl(i,ent)
-		form.Append(i,ent,false)
+	for i,u:=range us{
+		name:=""
+		if nameds!=nil && i<len(nameds) {
+			name=nameds[i]
+			self.addNamedControl(name,u)
+		}
+		form.Append(name,u,false)
 	}
 	self.Appends(form)
 	return self
 }
+
+
 func (self *BoxBuilder)AppendEntry(named  string)*BoxBuilder {
 	ret:=ui.NewEntry()
 	return  self.AppendControl(named,ret)
