@@ -60,8 +60,7 @@ func (self *BoxBuilder)AppendBtns(m map[string]func (*ui.Button),sorted []string
 func (self *BoxBuilder)AppendForm(nameds  ...string)*BoxBuilder {
 	return self.AppendFormWithComb(nil,nameds...)
 }
-
-func (self *BoxBuilder)AppendFormWithComb(comb []int,nameds  ...string)*BoxBuilder {
+func (self *BoxBuilder)AppendFormWithOther(comb []int,f func()ui.Control,nameds  ...string)*BoxBuilder {
 	us:=make([]ui.Control,len(nameds))
 	if comb==nil{
 		comb=make([]int,0)
@@ -71,11 +70,17 @@ func (self *BoxBuilder)AppendFormWithComb(comb []int,nameds  ...string)*BoxBuild
 	for i,_:=range nameds{
 		var ent ui.Control=ui.NewEntry()
 		if set.Contains(i){
-			ent=ui.NewCombobox()
+			ent=f()
 		}
 		us=append(us,ent)
 	}
 	return self.AppendMixForm(nameds,us...)
+}
+func (self *BoxBuilder)AppendFormWithComb(comb []int,nameds  ...string)*BoxBuilder {
+	return self.AppendFormWithOther(comb,func()ui.Control{return ui.NewCombobox()},nameds...)
+}
+func (self *BoxBuilder)AppendFormWithEdtComb(comb []int,nameds  ...string)*BoxBuilder {
+	return self.AppendFormWithOther(comb,func()ui.Control{return ui.NewEditableCombobox()},nameds...)
 }
 func (self *BoxBuilder)AppendMixForm(nameds  []string,us ...ui.Control)*BoxBuilder {
 	form:=ui.NewForm()
