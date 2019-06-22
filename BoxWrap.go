@@ -72,7 +72,7 @@ func (self *BoxBuilder)AppendFormWithOther(comb []int,f func()ui.Control,nameds 
 		if set.Contains(i){
 			ent=f()
 		}
-		us=append(us,ent)
+		us[i]=ent
 	}
 	return self.AppendMixForm(nameds,us...)
 }
